@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { Alumno } from 'src/app/models/alumno';
+import { AltasComponent } from '../forms/altas/altas.component';
 
 const milisecondsHour = 3600000;
 
@@ -26,7 +28,7 @@ export class AlumnosComponent {
       matematicas: 5,
       espanol: 5,
       cienciasNaturales: 5,
-      civismo: 10,
+      civismo: 8,
       online: false,
     },
     {
@@ -56,10 +58,10 @@ export class AlumnosComponent {
       firstName: 'Querubinosa',
       lastName: 'Rodriguez',
       update: new Date(Date.now() - this.randomHours(1000) * milisecondsHour),
-      matematicas: 6,
+      matematicas: 5,
       espanol: 5,
       cienciasNaturales: 6,
-      civismo: 6,
+      civismo: 5,
       online: false,
     },
     {
@@ -113,7 +115,7 @@ export class AlumnosComponent {
       update: new Date(Date.now() - this.randomHours(1000) * milisecondsHour),
       matematicas: 10,
       espanol: 5,
-      cienciasNaturales: 6,
+      cienciasNaturales: 9,
       civismo: 10,
       online: true,
     },
@@ -137,6 +139,33 @@ export class AlumnosComponent {
   getTotal(alumnoId: number): number {
     const alumno = this.getAlumno(alumnoId);
     return (alumno.espanol  + alumno.matematicas + alumno.cienciasNaturales + alumno.civismo) / 4 
+  }
+
+  aplicarFiltros(ev: Event): void {
+    const inputValue = (ev.target as HTMLInputElement)?.value;
+    this.dataSource.filter = inputValue?.trim()?.toLowerCase();
+  }
+
+  constructor(private matDialog: MatDialog) {}
+
+  abrirAltas(): void {
+    const dialog = this.matDialog.open(AltasComponent)
+    dialog.afterClosed().subscribe((valor) => {
+      if (valor){
+        this.dataSource.data = [
+          ...this.dataSource.data,
+          {
+            ...valor,
+            id: this.dataSource.data.length + 1,
+            update: new Date(),
+            espanol: null,
+            matematicas: null,
+            cienciasNaturales: null,
+            civismo: null,
+          }
+        ]
+      }
+    })
   }
 
   dataSource = new MatTableDataSource(this.alumnos);
