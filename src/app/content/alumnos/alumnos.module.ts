@@ -8,10 +8,11 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { DirectivesModule } from 'src/app/shared/directives/directives.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AltasModule } from '../forms/altas/altas.module';
 import { MatButtonModule } from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DeleteDialogModule } from './delete-dialog/delete-dialog.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AlumnosComponent],
@@ -24,10 +25,11 @@ import {MatIconModule} from '@angular/material/icon';
     DirectivesModule,
     MatFormFieldModule,
     MatInputModule,
-    AltasModule,
+    FormsModule,
     MatButtonModule,
     MatIconModule,
-    AltasModule
+    MatTooltipModule,
+    DeleteDialogModule
   ],
   providers: [],
   exports: [AlumnosComponent],

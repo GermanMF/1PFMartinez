@@ -9,6 +9,7 @@ import { AlumnosModule } from './content/alumnos/alumnos.module';
 
 import localeEsMX from '@angular/common/locales/es-MX';
 import { registerLocaleData } from '@angular/common';
+import { FormsModule } from './content/forms/forms.module';
 
 registerLocaleData(localeEsMX, 'es-MX');
 
@@ -21,7 +22,8 @@ registerLocaleData(localeEsMX, 'es-MX');
     AppRoutingModule,
     DashboardModule,
     BrowserAnimationsModule,
-    AlumnosModule
+    AlumnosModule,
+    FormsModule
   ],
   providers: [ {provide: LOCALE_ID, useValue: 'es-MX'} ],
   bootstrap: [AppComponent]

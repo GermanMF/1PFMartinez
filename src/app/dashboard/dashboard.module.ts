@@ -6,15 +6,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { RouterModule, Routes } from '@angular/router';
-import { AlumnosComponent } from '../content/alumnos/alumnos.component';
-import { AltasComponent } from '../content/forms/altas/altas.component';
+import { AlumnosModule } from '../content/alumnos/alumnos.module';
+import { FormsModule } from '@angular/forms';
 
-const routes: Routes = [
-  { path: 'alumnos', component: AlumnosComponent },
-  { path: 'forms/altas', component: AltasComponent },
-  { path: '', redirectTo: 'alumnos', pathMatch: 'full' },
-];
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -25,7 +19,8 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     MatListModule,
-    RouterModule.forRoot(routes),
+    AlumnosModule,
+    FormsModule
   ],
   exports: [DashboardComponent],
 })

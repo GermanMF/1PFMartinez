@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Alumno } from 'src/app/models/alumno';
 import { AltasComponent } from '../forms/altas/altas.component';
+import { DeleteDialogComponent } from './delete-dialog/delete-dialog.component';
+import { EditarComponent } from '../forms/editar/editar.component';
 
 const milisecondsHour = 3600000;
 
@@ -12,12 +14,9 @@ const milisecondsHour = 3600000;
   styleUrls: ['./alumnos.component.scss'],
 })
 export class AlumnosComponent {
-
-  
-
-  randomHours = function getRandomInt(top: number){
+  randomHours = function getRandomInt(top: number) {
     return Math.floor(Math.random() * top);
-  }
+  };
 
   alumnos: Alumno[] = [
     {
@@ -132,13 +131,19 @@ export class AlumnosComponent {
     },
   ];
 
-  getAlumno(alumnoId: number): Alumno{
-    return this.alumnos.find(alumno => alumno.id == alumnoId)!
+  getAlumno(alumnoId: number): Alumno {
+    return this.alumnos.find((alumno) => alumno.id == alumnoId)!;
   }
 
   getTotal(alumnoId: number): number {
     const alumno = this.getAlumno(alumnoId);
-    return (alumno.espanol  + alumno.matematicas + alumno.cienciasNaturales + alumno.civismo) / 4 
+    return (
+      (alumno.espanol +
+        alumno.matematicas +
+        alumno.cienciasNaturales +
+        alumno.civismo) /
+      4
+    );
   }
 
   aplicarFiltros(ev: Event): void {
@@ -149,29 +154,70 @@ export class AlumnosComponent {
   constructor(private matDialog: MatDialog) {}
 
   abrirAltas(): void {
-    const dialog = this.matDialog.open(AltasComponent)
+    const dialog = this.matDialog.open(AltasComponent);
     dialog.afterClosed().subscribe((valor) => {
-      if (valor){
-        this.dataSource.data = [
-          ...this.dataSource.data,
-          {
-            ...valor,
-            id: this.dataSource.data.length + 1,
-            update: new Date(),
-            espanol: null,
-            matematicas: null,
-            cienciasNaturales: null,
-            civismo: null,
-          }
-        ]
+      this.add(valor);
+    });
+  }
+
+  abrirEdicion(alumno: Alumno) {
+    const dialog = this.matDialog.open(EditarComponent, {
+      data: alumno,
+    });
+    dialog.afterClosed().subscribe((valor) => {
+      this.modify(valor);
+    });
+  }
+
+  eliminarUsuario(alumno: Alumno) {
+    const dialog = this.matDialog.open(DeleteDialogComponent, {
+      data: alumno,
+    });
+    dialog.disableClose = true;
+    dialog.afterClosed().subscribe((valor) => {
+      if (valor) {
+        this.delete(alumno);
       }
-    })
+    });
+  }
+
+  add(alumno: Alumno) {
+    if (alumno.firstName || alumno.lastName || alumno.online) {
+      alumno = {
+        ...alumno,
+        id: this.alumnos[this.alumnos.length - 1].id + 1,
+      };
+      this.alumnos.push(alumno);
+      this.dataSource = new MatTableDataSource(this.alumnos);
+    }
+  }
+
+  delete(alumno: Alumno): void {
+    this.alumnos.splice(this.alumnos.indexOf(alumno), 1);
+    this.dataSource = new MatTableDataSource(this.alumnos);
+  }
+
+  modify(alumno: Alumno) {
+    const index = this.alumnos.findIndex((alumnoI) => {
+      return alumnoI.id === alumno.id;
+    });
+    this.alumnos[index] = alumno;
+    this.dataSource = new MatTableDataSource(this.alumnos);
   }
 
   dataSource = new MatTableDataSource(this.alumnos);
 
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'update', 'matematicas', 'espanol', 'cienciasNaturales', 'civismo', 'total', 'online']
-
-
-
+  displayedColumns: string[] = [
+    'id',
+    'firstName',
+    'lastName',
+    'update',
+    'matematicas',
+    'espanol',
+    'cienciasNaturales',
+    'civismo',
+    'total',
+    'online',
+    'accion',
+  ];
 }

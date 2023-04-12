@@ -12,23 +12,5 @@ export interface linkProperty {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  linkProperties: linkProperty[] = [
-    {
-      id: 1,
-      route: 'alumnos',
-      name: 'Menú Principal',
-    },
-    {
-      id: 2,
-      route: 'alumnos',
-      name: 'Lista general',
-    },
-    {
-      id: 3,
-      route: 'forms/altas',
-      name: 'Altas',
-    },
-  ];
-
   showFiller = false;
 }
